@@ -48,6 +48,54 @@ img.avatar {
     gap: 16px
 }
 
+.modal {
+    z-index: 3;
+    display: none;
+    padding-top: 100px;
+    position: fixed;
+    inset: 0;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4)
+}
+
+.modal-content {
+    margin: auto;
+    background-color: var(--w3-surface);
+    position: relative;
+    padding: 0;
+    width: 600px
+}
+
+.modal-content {
+    margin: auto;
+    background-color: var(--w3-surface);
+    position: relative;
+    padding: 0;
+    width: 600px
+}
+
+.content,
+.auto {
+    margin-inline: auto
+}
+
+.content {
+    max-width: 980px
+}
+
+.auto {
+    max-width: 1140px
+}
+
+.container,
+.panel {
+    padding: 0.01em 16px
+}
+
+.panel {
+    margin-block: 16px
+}
+
 .mainmenu {
     display: block;
     opacity: 0.60;
@@ -133,6 +181,18 @@ img.avatar {
     background-color: #000 !important
 }
 
+.light-gray,
+.hover-light-gray:hover {
+    color: #000 !important;
+    background-color: #f1f1f1 !important
+}
+
+.dark-gray,
+.hover-dark-gray:hover {
+    color: #fff !important;
+    background-color: #616161 !important
+}
+
 .animate-top {
     position: relative;
     animation: animatetop 0.4s
@@ -184,6 +244,14 @@ img.avatar {
     initial-value: 90%;
 } */
 
+.dark-grey,
+.hover-dark-grey:hover,
+.dark-gray,
+.hover-dark-gray:hover {
+    color: #fff !important;
+    background-color: #616161 !important
+}
+
 #bar90 {
     width: 90%;
 }
@@ -208,6 +276,21 @@ img.avatar {
 .aboutgrid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 32px;
+}
+
+.section,
+.code {
+    margin-block: 16px !important;
+    color: white !important;
+}
+
+.grid {
+    display: grid
+}
+
+.grid-padding {
+    display: grid;
+    gap: 16px
 }
 
 .contactbox {
