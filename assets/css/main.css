@@ -120,7 +120,11 @@ img.avatar {
 
 .job-columns-layout {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px
+}
+
+.job-img {
+    width: 100%;
+    height: auto;
 }
 
 .modal {
