@@ -237,7 +237,8 @@ img.avatar {
 }
 
 .right {
-    float: right !important
+    float: right !important;
+    width: auto !important;
 }
 
 .center {
