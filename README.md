@@ -1,0 +1,2 @@
+# CSSBlog
+Pure html blog
