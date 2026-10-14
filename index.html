@@ -6,57 +6,56 @@
     <meta name="description" content="Sample blog template">
     <meta name="robots" content="NoIndex, NoFollow">
     <link rel="stylesheet" href="./assets/css/main.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/6/w3.css">
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>CodeLab Blog</title>
 </head>
 
 <body>
-    <header class="w3-top">
+    <header>
         <h1 class="display-none">CodeLab</h1>
-        <nav class="w3-flex w3-white w3-opacity" id="myNavbar">
+        <nav id="myNavbar">
             <h2 class="display-none">Menú</h2>
             <ul>
-                <li><a href="#home" class="w3-button"><i class="fa fa-home"></i>INICIO</a></li>
+                <li><a href="#home" class="button hide-small"><i class="fa fa-home"></i>INICIO</a></li>
 
-                <li><a href="#about" class="w3-button w3-hide-small">
+                <li><a href="#about" class="button hide-small">
                         <i class="fa fa-user"></i> ACERCA DE
                     </a></li>
 
-                <li><a href="#portfolio" class="w3-button w3-hide-small">
+                <li><a href="#portfolio" class="button hide-small">
                         <i class="fa fa-th"></i> MI TRABAJO
                     </a></li>
 
-                <li><a href="#contact" class="w3-button w3-hide-small">
+                <li><a href="#contact" class="button hide-small">
                         <i class="fa fa-envelope"></i> CONTACTO
                     </a></li>
 
-                <li><a href="#" class="w3-button w3-hide-small w3-hover-red leftalign-menuitems">
+                <li><a href="#" class="button hide-small w3-hover-red leftalign-menuitems">
                         <i class="fa fa-search"></i>
                     </a></li>
             </ul>
 
-            <button class="w3-button w3-hide-medium w3-hide-large leftalign-menuitems" onclick="toggleFunction()"
+            <button class="button hide-medium hide-large leftalign-menuitems" onclick="toggleFunction()"
                 title="Abrir el menú de navegación">
                 <i class="fa fa-bars"></i>
             </button>
-
         </nav>
 
         <!-- Navigation on small screens -->
-        <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
-            <nav class="w3-flex w3-white w3-opacity">
+        <div id="navDemo" class="w3-bar-block w3-white hide hide-large hide-medium">
+            <nav class="mainmenu">
                 <h2 class="display-none">Menú móvil</h2>
                 <ul>
-                    <li><a href="#about" class="w3-bar-item w3-button" onclick="toggleFunction()">ACERCA DE</a>
+                    <li><a href="#about" class="w3-bar-item button" onclick="toggleFunction()">ACERCA DE</a>
 
-                    <li><a href="#portfolio" class="w3-bar-item w3-button" onclick="toggleFunction()">MI TRABAJO</a>
+                    <li><a href="#portfolio" class="w3-bar-item button" onclick="toggleFunction()">MI TRABAJO</a>
                     </li>
 
-                    <li><a href="#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACTO</a></li>
+                    <li><a href="#contact" class="w3-bar-item button" onclick="toggleFunction()">CONTACTO</a></li>
 
-                    <li> <a href="#" class="w3-bar-item w3-button">BÚSQUEDA</a></li>
+                    <li> <a href="#" class="w3-bar-item button">BÚSQUEDA</a></li>
                 </ul>
             </nav>
         </div>
@@ -409,20 +408,20 @@
         </section>
     </main>
     <!-- Footer -->
-    <footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off">
+    <footer class="w3-center w3-black w3-padding-64 opacity w3-hover-opacity-off">
 
-        <a href="#home" class="w3-button w3-light-grey">
+        <a href="#home" class="button w3-light-grey">
             <i class="fa fa-arrow-up w3-margin-right"></i>
             Navegar al inicio
         </a>
 
         <ul class="w3-xlarge">
-            <li><a href="https://www.google.com"><i class="fa fa-facebook-official w3-hover-opacity"></i></a></li>
-            <li><i class="fa fa-instagram w3-hover-opacity"></i></li>
-            <li><i class="fa fa-snapchat w3-hover-opacity"></i></li>
-            <li><i class="fa fa-pinterest-p w3-hover-opacity"></i></li>
-            <li><i class="fa fa-twitter w3-hover-opacity"></i></li>
-            <li><i class="fa fa-linkedin w3-hover-opacity"></i></li>
+            <li><a href="https://www.google.com"><i class="fa fa-facebook-official hover-opacity"></i></a></li>
+            <li><i class="fa fa-instagram hover-opacity"></i></li>
+            <li><i class="fa fa-snapchat hover-opacity"></i></li>
+            <li><i class="fa fa-pinterest-p hover-opacity"></i></li>
+            <li><i class="fa fa-twitter hover-opacity"></i></li>
+            <li><i class="fa fa-linkedin hover-opacity"></i></li>
         </ul>
 
         <p>
@@ -448,9 +447,9 @@
             if (document.body.scrollTop > 100 ||
                 document.documentElement.scrollTop > 100) {
                 navbar.className =
-                    "w3-flex w3-card w3-animate-top w3-white";
+                    "card animate-top mainmenu";
             } else {
-                navbar.className = "w3-flex w3-white w3-opacity";
+                navbar.className = "mainmenu";
             }
         }
 
@@ -458,10 +457,10 @@
         function toggleFunction() {
             var x = document.getElementById("navDemo");
 
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
+            if (x.className.indexOf("show") == -1) {
+                x.className += " show";
             } else {
-                x.className = x.className.replace(" w3-show", "");
+                x.className = x.className.replace(" show", "");
             }
         }
     </script>
