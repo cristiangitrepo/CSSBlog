@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colección de Personajes de Super Mario</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #2d2c2c;
+            --primary: #e52521;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #fbd000;
+            text-shadow: 2px 2px #e52521;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: #fbd000;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #ffea5c;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+
+        /* =================================
+        LISTA DE PERSONAJES
+        ================================= */
+
+        .character-list {
+            list-style: none;
+            padding: 10px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 22px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .character-card {
+            --accent: #94a3b8;
+
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+
+            min-height: 280px;
+
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        /* Hover */
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.10);
+            border-color: #cbd5e1;
+        }
+
+        .character-card img {
+            width: 100%;
+            height: 265px;
+            object-fit: contain;
+            padding: 15px;
+            box-sizing: border-box;
+
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.10));
+
+            transition: transform 0.3s ease;
+        }
+
+        .character-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .character-card h3 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 62px;
+
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0 50px 0 14px;
+
+            display: flex;
+            align-items: center;
+
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: left;
+            /* text-transform: capitalize; */
+            color: #ffffff;
+
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+
+        }
+
+
+        /* Base de la insignia */
+        .character-card::after {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: bold;
+
+            opacity: 0;
+            transform: scale(0.5);
+
+            transition: all 0.25s ease;
+        }
+
+        /* NORMAL: sin insignia */
+        .character-card.normal::after {
+            content: none;
+        }
+
+        /* SELECCIONADA: check verde */
+        .character-card.seleccionada {
+            border: 2px solid #22c55e;
+            box-shadow: 0 5px 18px rgba(34, 197, 94, 0.12);
+        }
+
+        .character-card.seleccionada::after {
+            content: "✓";
+            color: white;
+            background: #22c55e;
+
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ENEMIGO: explosión roja */
+        .character-card.enemigo {
+            border: 2px solid #ef4444;
+            box-shadow: 0 5px 18px rgba(239, 68, 68, 0.12);
+        }
+
+        .character-card.enemigo::after {
+            content: "💥";
+            background: #fee2e2;
+            color: #dc2626;
+
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ESPECIAL: estrella dorada */
+        .character-card.especial {
+            border: 2px solid #3b82f6;
+            box-shadow: 0 5px 18px rgba(59, 130, 246, 0.12);
+        }
+
+        .character-card.especial::after {
+            content: "★";
+            color: white;
+            background: #3b82f6;
+
+            opacity: 1;
+            transform: scale(1);
+        }
+
+
+        /* =================================
+        ACCESIBILIDAD
+        ================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .character-card,
+            .character-card img {
+                transition: none;
+            }
+
+            .character-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Gestor de Tarjetas - Super Mario</h1>
+        <p>Haz clic en el botón para añadir un personaje aleatorio o haz clic sobre una tarjeta para cambiar su estado.
+        </p>
+    </header>
+
+    <main>
+        <section class="controls">
+            <button id="add-random-btn">Añadir Personaje Aleatorio</button>
+        </section>
+
+        <section>
+            <!-- Lista no ordenada semántica -->
+            <ul id="character-list" class="character-list">
+                <!-- Las tarjetas se insertarán aquí dinámicamente -->
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        // Colección activa renderizada en la lista
+        const coleccionActiva = [];
+        const estadosDisponibles = ['normal', 'seleccionada', 'enemigo', 'especial'];
+
+        class Personaje {
+            constructor(nombre, imagen, colorFondo, estadoInicial = 'normal') {
+                this.nombre = nombre;
+                this.imagen = imagen;
+                this.colorFondo = colorFondo;
+                this.estado = estadoInicial; // normal, seleccionada, enemigo, especial
+            }
+
+            alternarClase(htmlElement, nombreClase) {
+                if (htmlElement) {
+                    htmlElement.classList.toggle(nombreClase);
+                } else {
+                    console.warn("El elemento no ha sido encontrado en el DOM.");
+                }
+            }
+        }
+
+        const catalogoPersonajes = [
+            new Personaje('Mario', './img/mario.webp', '#ffffff', 'normal'),
+            new Personaje('Luigi', './img/luigi.webp', '#43b047', 'normal'),
+            new Personaje('Seta', './img/setaAzul.webp', '#555555', 'especial'),
+            new Personaje('Bowser', './img/bowser.webp', '#2e7d32', 'enemigo'),
+            new Personaje('King Boo', './img/king-boo.webp', '#b0bec5', 'enemigo'),
+            new Personaje('Lakitu', './img/lakitu.webp', '#00acc1', 'enemigo'),
+            new Personaje('Wario', './img/wario.webp', '#ffb300', 'enemigo'),
+            new Personaje('Yoshi', './img/yoshi.webp', '#7cb342', 'normal'),
+        ];
+
+        function añadirTarjetaAleatoria() {
+            // Seleccionar un personaje aleatorio del catálogo
+            const indiceAleatorio = Math.floor(Math.random() * catalogoPersonajes.length);
+            const personajeSeleccionado = catalogoPersonajes[indiceAleatorio];
+            coleccionActiva.push(personajeSeleccionado);
+
+            renderizarTarjetas();
+        }
+
+        function cambiarEstado(li, index) {
+            const personaje = coleccionActiva[index];
+
+            // Cambia al siguiente estado de la lista
+            const estadoActualIndex = estadosDisponibles.indexOf(personaje.estado);
+            const siguienteEstadoIndex = (estadoActualIndex + 1) % estadosDisponibles.length;
+
+            personaje.alternarClase(li, estadosDisponibles[estadoActualIndex]);
+            personaje.alternarClase(li, estadosDisponibles[siguienteEstadoIndex]);
+
+            personaje.estado = estadosDisponibles[siguienteEstadoIndex];
+        }
+
+        function renderizarTarjetas() {
+            const ulElement = document.querySelector('#character-list');
+            ulElement.innerHTML = ''; // Limpiar lista actual
+
+            coleccionActiva.forEach((personaje, index) => {
+                const li = document.createElement('li');
+
+                // Estructura de la tarjeta
+                li.classList.add("character-card");
+                li.classList.add(personaje.estado);
+                li.style.setProperty('--card-bg', personaje.colorFondo);
+
+                // Evento para cambiar de estado al hacer clic en la tarjeta
+                li.addEventListener('click', () => cambiarEstado(li, index));
+
+                li.innerHTML = `
+                    <img src="${personaje.imagen}" alt="${personaje.nombre}">
+                    <h3>${personaje.nombre}</h3>
+                `;
+
+                ulElement.appendChild(li);
+            });
+        }
+
+        // Event listener para el botón principal
+        document.querySelector('#add-random-btn').addEventListener('click', añadirTarjetaAleatoria);
+
+        // Añadir un personaje inicial al cargar la página para que no esté vacía
+        window.addEventListener('DOMContentLoaded', () => {
+            añadirTarjetaAleatoria();
+        });
+    </script>
+</body>
+
+</html>
