@@ -267,81 +267,129 @@
     </main>
 
     <script>
-        // Colección activa renderizada en la lista
-        const coleccionActiva = [];
-        const estadosDisponibles = ['normal', 'seleccionada', 'enemigo', 'especial'];
 
         class Personaje {
             constructor(nombre, imagen, colorFondo, estadoInicial = 'normal') {
                 this.nombre = nombre;
                 this.imagen = imagen;
                 this.colorFondo = colorFondo;
+                this.elemento;
                 this.estado = estadoInicial; // normal, seleccionada, enemigo, especial
+
+                const li = document.createElement('li');
+                // Estructura de la tarjeta
+                li.classList.add("character-card");
+                li.classList.add(this.estado);
+
+                // Evento para cambiar de estado al hacer clic en la tarjeta
+                li.addEventListener('click', () => this.cambiarEstado());
+
+                li.innerHTML = `
+                    <img src="${this.imagen}" alt="${this.nombre}">
+                    <h3>${this.nombre}</h3>
+                `;
+
+                this.elemento = li;
             }
 
-            alternarClase(htmlElement, nombreClase) {
-                if (htmlElement) {
-                    htmlElement.classList.toggle(nombreClase);
-                } else {
-                    console.warn("El elemento no ha sido encontrado en el DOM.");
+            estadosDisponibles = ['normal', 'seleccionada', 'enemigo', 'especial'];
+
+            // Getter para obtener el estado actual
+            get estado() {
+                return this._estado;
+            }
+
+            // Setter que gestiona automáticamente la classList del elemento HTML
+            set estado(nuevoEstado) {
+                if (this.estadosDisponibles.includes(nuevoEstado)) {
+                    this._estado = nuevoEstado;
+
+                    if (this.elemento) {
+                        // Elimina todos los estados posibles de la classList
+                        this.estadosDisponibles.forEach(e => this.elemento.classList.remove(e));
+                        // Añade el estado actual
+                        this.elemento.classList.add(nuevoEstado);
+                    }
                 }
+            }
+
+            cambiarEstado() {
+                const estadoActualIndex = this.estadosDisponibles.indexOf(this.estado);
+                const siguienteEstadoIndex = (estadoActualIndex + 1) % this.estadosDisponibles.length;
+                this.estado = this.estadosDisponibles[siguienteEstadoIndex];
             }
         }
 
+        class Mario extends Personaje {
+            constructor() {
+                super('Mario', './img/mario.webp', '#ffffff');
+            }
+        }
+        class Luigi extends Personaje {
+            constructor() {
+                super('Luigi', './img/luigi.webp', '#43b047');
+            }
+        }
+        class Seta extends Personaje {
+            constructor() {
+                super('Seta', './img/setaAzul.webp', '#555555', 'especial');
+            }
+        }
+        class Bowser extends Personaje {
+            constructor() {
+                super('Bowser', './img/bowser.webp', '#2e7d32', 'enemigo');
+            }
+        }
+        class Lakitu extends Personaje {
+            constructor() {
+                super('Lakitu', './img/lakitu.webp', '#00acc1', 'seleccionada');
+            }
+        }
+        class Wario extends Personaje {
+            constructor() {
+                super('Wario', './img/wario.webp', '#ffb300', 'enemigo');
+            }
+        }
+        class Yoshi extends Personaje {
+            constructor() {
+                super('Yoshi', './img/yoshi.webp', '#7cb342');
+            }
+        }
+        class KingBoo extends Personaje {
+            constructor() {
+                super('King Boo', './img/king-boo.webp', '#b0bec5', 'enemigo');
+            }
+        }
+
+        // Colección activa renderizada en la lista
+        const coleccionActiva = [];
+        //Tipos de personajes disponibles
         const catalogoPersonajes = [
-            new Personaje('Mario', './img/mario.webp', '#ffffff', 'normal'),
-            new Personaje('Luigi', './img/luigi.webp', '#43b047', 'normal'),
-            new Personaje('Seta', './img/setaAzul.webp', '#555555', 'especial'),
-            new Personaje('Bowser', './img/bowser.webp', '#2e7d32', 'enemigo'),
-            new Personaje('King Boo', './img/king-boo.webp', '#b0bec5', 'enemigo'),
-            new Personaje('Lakitu', './img/lakitu.webp', '#00acc1', 'enemigo'),
-            new Personaje('Wario', './img/wario.webp', '#ffb300', 'enemigo'),
-            new Personaje('Yoshi', './img/yoshi.webp', '#7cb342', 'normal'),
+            Mario,
+            Luigi,
+            Seta,
+            Bowser,
+            Wario,
+            Lakitu,
+            Yoshi,
+            KingBoo,
         ];
 
         function añadirTarjetaAleatoria() {
-            // Seleccionar un personaje aleatorio del catálogo
             const indiceAleatorio = Math.floor(Math.random() * catalogoPersonajes.length);
-            const personajeSeleccionado = catalogoPersonajes[indiceAleatorio];
+            const ClaseSeleccionada = catalogoPersonajes[indiceAleatorio];
+            const personajeSeleccionado = new ClaseSeleccionada();
             coleccionActiva.push(personajeSeleccionado);
 
             renderizarTarjetas();
-        }
-
-        function cambiarEstado(li, index) {
-            const personaje = coleccionActiva[index];
-
-            // Cambia al siguiente estado de la lista
-            const estadoActualIndex = estadosDisponibles.indexOf(personaje.estado);
-            const siguienteEstadoIndex = (estadoActualIndex + 1) % estadosDisponibles.length;
-
-            personaje.alternarClase(li, estadosDisponibles[estadoActualIndex]);
-            personaje.alternarClase(li, estadosDisponibles[siguienteEstadoIndex]);
-
-            personaje.estado = estadosDisponibles[siguienteEstadoIndex];
         }
 
         function renderizarTarjetas() {
             const ulElement = document.querySelector('#character-list');
             ulElement.innerHTML = ''; // Limpiar lista actual
 
-            coleccionActiva.forEach((personaje, index) => {
-                const li = document.createElement('li');
-
-                // Estructura de la tarjeta
-                li.classList.add("character-card");
-                li.classList.add(personaje.estado);
-                li.style.setProperty('--card-bg', personaje.colorFondo);
-
-                // Evento para cambiar de estado al hacer clic en la tarjeta
-                li.addEventListener('click', () => cambiarEstado(li, index));
-
-                li.innerHTML = `
-                    <img src="${personaje.imagen}" alt="${personaje.nombre}">
-                    <h3>${personaje.nombre}</h3>
-                `;
-
-                ulElement.appendChild(li);
+            coleccionActiva.forEach((personaje) => {
+                ulElement.appendChild(personaje.elemento);
             });
         }
 

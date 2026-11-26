@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        /* =====================================================
+   1. VARIABLES GLOBALES
+   ===================================================== */
+
+        :root {
+            --color-rojo-bros-base: #e52521;
+            --color-rojo-bros-oscuro: #a8120f;
+            --color-azul-bros-base: #049cd8;
+            --color-azul-bros-oscuro: #04719c;
+            --color-reset-base: #555;
+            --color-reset-oscuro: #222;
+        }
+
+        /* =====================================================
+   2. CONTENEDOR PRINCIPAL
+   ===================================================== */
+
+        body.jsMario {
+            main {
+
+                /* Sección principal de Mario */
+                &>section.marioClass {
+                    margin-bottom: 25vh;
+
+                    .escenario {
+                        position: relative;
+                        overflow: hidden;
+                        height: 40dvh;
+                        border: 4px solid #333;
+                        border-radius: 10px;
+
+                        background: linear-gradient(to bottom, #87ceeb 0%, #c9f0ff 70%, #72c472 70%, #319447 100%);
+
+                        /* Personaje Mario */
+                        .mario {
+                            position: absolute;
+                            left: 2em;
+                            bottom: 0;
+                            margin: 0;
+
+                            transform-origin: bottom center;
+
+                            transition:
+                                left 0.5s ease,
+                                transform 0.3s ease;
+
+                            img {
+                                display: block;
+                                width: 100px;
+                            }
+
+                        }
+
+                        /* Animación de salto */
+                        .mario.saltando {
+                            animation: salto 0.6s ease;
+                        }
+                    }
+
+                    output.info {
+                        display: block;
+                        padding: 1em;
+                    }
+                }
+
+                /* ---------------------------------------------
+               2.3. CONTROLES
+               --------------------------------------------- */
+
+                article.controles {
+                    margin-top: 20px;
+                    padding: 2em;
+                    border: 2px solid #ddd;
+                    border-radius: 14px;
+                    background: #fafafa;
+
+                    /* Títulos */
+                    h3 {
+                        margin-top: 0;
+                    }
+
+                    /* Grupo de movimiento */
+                    &.creacion,
+                    &.movimiento {
+                        .btn {
+                            background: linear-gradient(var(--color-rojo-bros-base), var(--color-rojo-bros-oscuro));
+                        }
+                    }
+
+                    /* Grupo de transformaciones */
+                    &.transformaciones {
+                        margin-top: 5vh;
+
+                        .btn {
+                            background: linear-gradient(var(--color-azul-bros-base), var(--color-azul-bros-oscuro));
+                        }
+                    }
+
+                    /* -----------------------------------------
+                   2.3.1. LISTA DE BOTONES
+                   ----------------------------------------- */
+
+                    .lista-botones {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+
+                        li {
+                            /* Elementos de la lista */
+
+                            /* -----------------------------------------
+                   2.3.2. BOTONES
+                   ----------------------------------------- */
+
+                            .btn {
+                                font: inherit;
+                                font-weight: 700;
+                                color: #fff;
+
+                                padding: 10px 18px;
+                                border: none;
+                                border-radius: 999px;
+
+                                box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+
+                                cursor: pointer;
+
+                                transition:
+                                    transform 0.15s,
+                                    box-shadow 0.15s,
+                                    filter 0.15s;
+
+                                /* Estados del botón */
+
+                                &:hover {
+                                    transform: translateY(-2px);
+                                    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.25);
+                                    filter: brightness(1.1);
+                                }
+
+                                &:active {
+                                    transform: translateY(3px);
+                                    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+                                }
+
+                                &:focus-visible {
+                                    outline: 3px solid gold;
+                                    outline-offset: 3px;
+                                }
+
+                                &:disabled {
+                                    filter: grayscale(1);
+                                    opacity: 0.5;
+                                    cursor: not-allowed;
+                                    transform: none;
+                                }
+
+                                /* Variante: reiniciar */
+
+                                &.btn-reset {
+                                    background: linear-gradient(var(--color-reset-base), var(--color-reset-oscuro));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /* =====================================================
+   3. ANIMACIONES
+   ===================================================== */
+
+        /* Pulso de los botones */
+
+        .pulsado {
+            animation: pulso 0.4s;
+        }
+
+        @keyframes pulso {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Salto de Mario */
+
+        @keyframes salto {
+
+            0%,
+            100% {
+                translate: 0 0;
+            }
+
+            50% {
+                translate: 0 -80px;
+            }
+        }
+
+        /* =====================================================
+   4. DISEÑO RESPONSIVE
+   ===================================================== */
+
+        @media (max-width: 600px) {
+            body.jsMario {
+                main>section.marioClass {
+                    article.game {
+                        .escenario {
+                            height: 30dvh;
+                        }
+                    }
+
+                    article.controles {
+                        padding: 1em;
+
+                        .lista-botones {
+                            gap: 8px;
+                        }
+
+                        .btn {
+                            padding: 10px 14px;
+                        }
+                    }
+                }
+            }
+        }
+    </style>
+</head>
+
+<body class="jsMario">
+    <main class="agua">
+        <section class="marioClass">
+            <header class="img-before portada">
+                <h2>Aprende JavaScript con Mario</h2>
+            </header>
+
+            <!-- ESCENARIO -->
+            <article class="game">
+                <h3>Escenario de Mario</h3>
+
+                <div id="escenario" class="escenario">
+                    <!-- JavaScript insertará aquí los objetos Mario -->
+                </div>
+
+                <!-- INFORMACIÓN -->
+                <output id="info" class="info" aria-live="polite">¡Pulsa Crear nuevo Mario para comenzar!</output>
+            </article>
+
+            <!-- CREACIÓN DE PERSONAJES -->
+            <article class="controles creacion">
+                <h3>Crear personajes</h3>
+
+                <ul class="lista-botones">
+                    <li>
+                        <button class="btn" id="btnCrearMario">Crear nuevo Mario</button>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- MOVIMIENTO -->
+            <article class="controles movimiento">
+                <h3>Movimiento</h3>
+
+                <ul class="lista-botones">
+                    <li>
+                        <button class="btn" id="btnAvanzar">Avanzar</button>
+                    </li>
+
+                    <li>
+                        <button class="btn" id="btnRetroceder">Retroceder</button>
+                    </li>
+
+                    <li>
+                        <button class="btn" id="btnSaltar">Saltar</button>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- TRANSFORMACIONES -->
+            <article class="controles transformaciones">
+                <h3>Transformaciones</h3>
+
+                <ul class="lista-botones">
+                    <li>
+                        <button class="btn" id="btnAumentar">Aumentar</button>
+                    </li>
+
+                    <li>
+                        <button class="btn" id="btnEncoger">Encoger</button>
+                    </li>
+
+                    <li>
+                        <button class="btn" id="btnRotar">Rotar</button>
+                    </li>
+
+                    <li>
+                        <button class="btn" id="btnDuplicar">Duplicar Mario</button>
+                    </li>
+
+                    <li>
+                        <button class="btn btn-reset" id="btnReset">Reiniciar</button>
+                    </li>
+                </ul>
+            </article>
+        </section>
+    </main>
+    <script>
+
+        // ===================================O
+        // 1. CLASE MARIO
+        // ===================================
+
+        class Mario {
+            constructor(nombre = "Mario") {
+                this.nombre = nombre;
+                this.x = 20;
+                this.scale = 1;
+                this.rotation = 0;
+
+                this.escenario = document.querySelector("#escenario");
+
+                // Crear elemento HTML
+                this.elemento = document.createElement("figure");
+
+                this.elemento.className = "mario";
+
+                this.elemento.innerHTML = `
+            <img
+                src="./img/super-mario-bross.webp"
+                alt="${this.nombre}"
+                draggable="false"
+            >
+            <figcaption>${this.nombre}</figcaption>
+        `;
+
+                // Insertar Mario en el escenario
+                this.escenario.appendChild(this.elemento);
+
+                // Actualizar posición
+                this.actualizar();
+            }
+
+            // ===================================
+            // ACTUALIZAR
+            // ===================================
+
+            actualizar() {
+                this.elemento.style.left = this.x + "px";
+
+                this.elemento.style.transform = `
+            scale(${this.scale})
+            rotate(${this.rotation}deg)
+        `;
+            }
+
+            // ===================================
+            // AVANZAR
+            // ===================================
+
+            avanzar(velocidad = 500) {
+                const maxX = this.escenario.clientWidth - this.elemento.offsetWidth;
+
+                this.x = Math.min(this.x + 100, maxX);
+
+                this.elemento.style.transition = `left ${velocidad}ms ease`;
+
+                this.actualizar();
+
+                this.mostrarMensaje(`${this.nombre} avanza.`);
+            }
+
+            // ===================================
+            // RETROCEDER
+            // ===================================
+
+            retroceder(velocidad = 500) {
+                this.x = Math.max(this.x - 100, 0);
+
+                this.elemento.style.transition = `left ${velocidad}ms ease`;
+
+                this.actualizar();
+
+                this.mostrarMensaje(`${this.nombre} retrocede.`);
+            }
+
+            // ===================================
+            // SALTAR
+            // ===================================
+
+            saltar() {
+                this.elemento.classList.remove("saltando");
+
+                // Reiniciar animación
+                void this.elemento.offsetWidth;
+
+                this.elemento.classList.add("saltando");
+
+                setTimeout(() => {
+                    this.elemento.classList.remove("saltando");
+                }, 700);
+
+                this.mostrarMensaje(`${this.nombre} salta.`);
+            }
+
+            // ===================================
+            // DUPLICAR
+            // ===================================
+
+            duplicar() {
+                const nuevoMario = new Mario(this.nombre + " clon");
+
+                nuevoMario.x = this.x + 100;
+                nuevoMario.scale = this.scale;
+                nuevoMario.rotation = this.rotation;
+
+                nuevoMario.actualizar();
+
+                // Registrar el nuevo objeto
+                marios.push(nuevoMario);
+
+                // Convertirlo en personaje activo
+                marioActivo = nuevoMario;
+
+                this.mostrarMensaje(`${this.nombre} se ha duplicado.`);
+
+                return nuevoMario;
+            }
+
+            // ===================================
+            // AUMENTAR
+            // ===================================
+
+            aumentar() {
+                this.scale += 0.2;
+
+                this.actualizar();
+
+                this.mostrarMensaje(`${this.nombre} aumenta de tamaño.`);
+            }
+
+            // ===================================
+            // ENCOGER
+            // ===================================
+
+            encoger() {
+                this.scale = Math.max(0.4, this.scale - 0.2);
+
+                this.actualizar();
+
+                this.mostrarMensaje(`${this.nombre} se encoge.`);
+            }
+
+            // ===================================
+            // ROTAR
+            // ===================================
+
+            rotar(grados = 45) {
+                this.rotation += grados;
+
+                this.actualizar();
+
+                this.mostrarMensaje(`${this.nombre} rota ${grados} grados.`);
+            }
+
+            // ===================================
+            // REINICIAR
+            // ===================================
+
+            reiniciar() {
+                this.x = 20;
+                this.scale = 1;
+                this.rotation = 0;
+
+                this.actualizar();
+
+                this.mostrarMensaje(`${this.nombre} vuelve a su posición inicial.`);
+            }
+
+            // ===================================
+            // MOSTRAR MENSAJES
+            // ===================================
+
+            mostrarMensaje(texto) {
+                document.querySelector("#info").textContent = texto;
+            }
+        }
+
+        // ===================================
+        // 2. VARIABLES DE CONTROL
+        // ===================================
+
+        // Array que almacena todos los objetos Mario
+        const marios = [];
+
+        // Personaje que recibirá las órdenes
+        let marioActivo = null;
+
+        // Contador de personajes
+        let contadorMario = 0;
+
+        // ===================================
+        // 3. CREAR UN NUEVO MARIO
+        // ===================================
+
+        function crearMario() {
+            contadorMario++;
+
+            const nuevoMario = new Mario(`Mario ${contadorMario}`);
+
+            marios.push(nuevoMario);
+
+            marioActivo = nuevoMario;
+
+            nuevoMario.mostrarMensaje(`${nuevoMario.nombre} ha sido creado.`);
+
+            return nuevoMario;
+        }
+
+        // ===================================
+        // 4. EVENTO: CREAR MARIO
+        // ===================================
+
+        document.querySelector("#btnCrearMario").addEventListener("click", crearMario);
+
+        // ===================================
+        // 5. EVENTOS DE MOVIMIENTO
+        // ===================================
+
+        document.querySelector("#btnAvanzar").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.avanzar(800);
+            }
+        });
+
+        document.querySelector("#btnRetroceder").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.retroceder(800);
+            }
+        });
+
+        document.querySelector("#btnSaltar").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.saltar();
+            }
+        });
+
+        // ===================================
+        // 6. EVENTOS DE TRANSFORMACIÓN
+        // ===================================
+
+        document.querySelector("#btnAumentar").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.aumentar();
+            }
+        });
+
+        document.querySelector("#btnEncoger").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.encoger();
+            }
+        });
+
+        document.querySelector("#btnRotar").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.rotar(90);
+            }
+        });
+
+        document.querySelector("#btnDuplicar").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.duplicar();
+            }
+        });
+
+        document.querySelector("#btnReset").addEventListener("click", () => {
+            if (marioActivo) {
+                marioActivo.reiniciar();
+            }
+        });
+
+    </script>
+</body>
+
+</html>
