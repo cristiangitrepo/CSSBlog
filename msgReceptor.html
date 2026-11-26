@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Receptor</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            padding: 50px;
+            background: #f0fdf4;
+        }
+
+        #mensaje {
+            font-size: 24px;
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 15px;
+            background: white;
+        }
+
+        /* Animación cuando se cumple la condición */
+        .animacion {
+            animation: celebrar 1s ease-in-out infinite alternate;
+            background: #bbf7d0 !important;
+            color: #166534;
+        }
+
+        @keyframes celebrar {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 5px #22c55e;
+            }
+
+            100% {
+                transform: scale(1.15);
+                box-shadow: 0 0 30px #22c55e;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📥 Página receptora</h1>
+
+    <div id="mensaje">
+        Esperando números...
+    </div>
+
+    <script>
+        // Nos conectamos al mismo canal
+        const canal = new BroadcastChannel("mi_canal");
+
+        // Escuchamos los mensajes
+        canal.onmessage = function (event) {
+
+            const datos = event.data;
+
+            if (datos.tipo === "numero") {
+
+                const numero = datos.valor;
+                const mensaje = document.getElementById("mensaje");
+
+                // Mostramos el número recibido
+                mensaje.textContent =
+                    "Has recibido el número: " + numero;
+
+                // Comprobamos la condición
+                if (numero >= 100) {
+
+                    mensaje.textContent +=
+                        " 🎉 ¡CONDICIÓN CUMPLIDA!";
+
+                    mensaje.classList.add("animacion");
+
+                } else {
+
+                    mensaje.classList.remove("animacion");
+
+                }
+            }
+        };
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Emisor</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            padding: 50px;
+            background: #eef2ff;
+        }
+
+        input,
+        button {
+            padding: 12px;
+            font-size: 18px;
+            margin: 10px;
+        }
+
+        button {
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📤 Página emisora</h1>
+
+    <input type="number" id="numero" placeholder="Introduce un número">
+
+    <button onclick="enviarNumero()">
+        Enviar número
+    </button>
+
+    <p id="estado"></p>
+
+    <script>
+        // Creamos el canal de comunicación
+        const canal = new BroadcastChannel("mi_canal");
+
+        function enviarNumero() {
+
+            const numero = Number(
+                document.getElementById("numero").value
+            );
+
+            // Enviamos el número
+            canal.postMessage({
+                tipo: "numero",
+                valor: numero
+            });
+
+            document.getElementById("estado").textContent =
+                "Número enviado: " + numero;
+        }
+    </script>
+
+</body>
+
+</html>

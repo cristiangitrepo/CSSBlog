@@ -268,119 +268,101 @@
 
     <script>
 
+        const EstadoPersonaje = Object.freeze({
+            NORMAL: 'normal',
+            SELECCIONADA: 'seleccionada',
+            ENEMIGO: 'enemigo',
+            ESPECIAL: 'especial'
+        });
+
         class Personaje {
-            constructor(nombre, imagen, colorFondo, estadoInicial = 'normal') {
+            constructor(nombre, imagen, colorFondo, estadoInicial = EstadoPersonaje.NORMAL) {
                 this.nombre = nombre;
                 this.imagen = imagen;
                 this.colorFondo = colorFondo;
-                this.elemento;
-                this.estado = estadoInicial; // normal, seleccionada, enemigo, especial
-
-                const li = document.createElement('li');
-                // Estructura de la tarjeta
-                li.classList.add("character-card");
-                li.classList.add(this.estado);
-
-                // Evento para cambiar de estado al hacer clic en la tarjeta
-                li.addEventListener('click', () => this.cambiarEstado());
-
-                li.innerHTML = `
-                    <img src="${this.imagen}" alt="${this.nombre}">
-                    <h3>${this.nombre}</h3>
-                `;
-
-                this.elemento = li;
+                this._estado = estadoInicial;
             }
 
-            estadosDisponibles = ['normal', 'seleccionada', 'enemigo', 'especial'];
-
-            // Getter para obtener el estado actual
             get estado() {
                 return this._estado;
             }
 
-            // Setter que gestiona automáticamente la classList del elemento HTML
             set estado(nuevoEstado) {
-                if (this.estadosDisponibles.includes(nuevoEstado)) {
+                if (Object.values(EstadoPersonaje).includes(nuevoEstado)) {
                     this._estado = nuevoEstado;
 
-                    if (this.elemento) {
-                        // Elimina todos los estados posibles de la classList
-                        this.estadosDisponibles.forEach(e => this.elemento.classList.remove(e));
-                        // Añade el estado actual
-                        this.elemento.classList.add(nuevoEstado);
+                    if (this.onCambioEstado) {
+                        this.onCambioEstado(this._estado);
                     }
                 }
             }
 
             cambiarEstado() {
-                const estadoActualIndex = this.estadosDisponibles.indexOf(this.estado);
-                const siguienteEstadoIndex = (estadoActualIndex + 1) % this.estadosDisponibles.length;
-                this.estado = this.estadosDisponibles[siguienteEstadoIndex];
+                const estadosArray = Object.values(EstadoPersonaje);
+                const estadoActualIndex = estadosArray.indexOf(this.estado);
+                const siguienteEstadoIndex = (estadoActualIndex + 1) % estadosArray.length;
+                this.estado = estadosArray[siguienteEstadoIndex];
             }
         }
 
-        class Mario extends Personaje {
-            constructor() {
-                super('Mario', './img/mario.webp', '#ffffff');
+        class Mario extends Personaje { constructor() { super('Mario', './img/mario.webp', '#ffffff'); } }
+        class Luigi extends Personaje { constructor() { super('Luigi', './img/luigi.webp', '#43b047'); } }
+        class Seta extends Personaje { constructor() { super('Seta', './img/setaAzul.webp', '#555555', EstadoPersonaje.ESPECIAL); } }
+        class Bowser extends Personaje { constructor() { super('Bowser', './img/bowser.webp', '#2e7d32', EstadoPersonaje.ENEMIGO); } }
+        class Lakitu extends Personaje { constructor() { super('Lakitu', './img/lakitu.webp', '#00acc1', EstadoPersonaje.SELECCIONADA); } }
+        class Wario extends Personaje { constructor() { super('Wario', './img/wario.webp', '#ffb300', EstadoPersonaje.ENEMIGO); } }
+        class Yoshi extends Personaje { constructor() { super('Yoshi', './img/yoshi.webp', '#7cb342'); } }
+        class KingBoo extends Personaje { constructor() { super('King Boo', './img/king-boo.webp', '#b0bec5', EstadoPersonaje.ENEMIGO); } }
+
+
+        class PersonajeView {
+            constructor(personaje) {
+                this.personaje = personaje;
+                this.elemento = this.crearElemento();
+
+                // Enlazamos el cambio de estado del modelo con la actualización visual
+                this.personaje.onCambioEstado = (nuevoEstado) => {
+                    this.actualizarClasesEstado(nuevoEstado);
+                };
             }
-        }
-        class Luigi extends Personaje {
-            constructor() {
-                super('Luigi', './img/luigi.webp', '#43b047');
+
+            crearElemento() {
+                const li = document.createElement('li');
+                li.classList.add("character-card");
+                li.classList.add(this.personaje.estado);
+                li.style.backgroundColor = this.personaje.colorFondo;
+
+                li.innerHTML = `<img src="${this.personaje.imagen}" alt="${this.personaje.nombre}">
+                                <h3>${this.personaje.nombre}</h3>`;
+
+
+                li.addEventListener('click', () => {
+                    this.personaje.cambiarEstado();
+                });
+
+                return li;
             }
-        }
-        class Seta extends Personaje {
-            constructor() {
-                super('Seta', './img/setaAzul.webp', '#555555', 'especial');
-            }
-        }
-        class Bowser extends Personaje {
-            constructor() {
-                super('Bowser', './img/bowser.webp', '#2e7d32', 'enemigo');
-            }
-        }
-        class Lakitu extends Personaje {
-            constructor() {
-                super('Lakitu', './img/lakitu.webp', '#00acc1', 'seleccionada');
-            }
-        }
-        class Wario extends Personaje {
-            constructor() {
-                super('Wario', './img/wario.webp', '#ffb300', 'enemigo');
-            }
-        }
-        class Yoshi extends Personaje {
-            constructor() {
-                super('Yoshi', './img/yoshi.webp', '#7cb342');
-            }
-        }
-        class KingBoo extends Personaje {
-            constructor() {
-                super('King Boo', './img/king-boo.webp', '#b0bec5', 'enemigo');
+
+            actualizarClasesEstado(nuevoEstado) {
+                Object.values(EstadoPersonaje).forEach(e => this.elemento.classList.remove(e));
+                this.elemento.classList.add(nuevoEstado);
             }
         }
 
-        // Colección activa renderizada en la lista
+
         const coleccionActiva = [];
-        //Tipos de personajes disponibles
-        const catalogoPersonajes = [
-            Mario,
-            Luigi,
-            Seta,
-            Bowser,
-            Wario,
-            Lakitu,
-            Yoshi,
-            KingBoo,
-        ];
+        const catalogoPersonajes = [Mario, Luigi, Seta, Bowser, Wario, Lakitu, Yoshi, KingBoo];
 
         function añadirTarjetaAleatoria() {
             const indiceAleatorio = Math.floor(Math.random() * catalogoPersonajes.length);
             const ClaseSeleccionada = catalogoPersonajes[indiceAleatorio];
-            const personajeSeleccionado = new ClaseSeleccionada();
-            coleccionActiva.push(personajeSeleccionado);
 
+            // Creamos el Modelo
+            const personaje = new ClaseSeleccionada();
+            // Creamos su Vista asociada
+            const vista = new PersonajeView(personaje);
+
+            coleccionActiva.push({ personaje, vista });
             renderizarTarjetas();
         }
 
@@ -388,15 +370,14 @@
             const ulElement = document.querySelector('#character-list');
             ulElement.innerHTML = ''; // Limpiar lista actual
 
-            coleccionActiva.forEach((personaje) => {
-                ulElement.appendChild(personaje.elemento);
+            coleccionActiva.forEach(({ vista }) => {
+                ulElement.appendChild(vista.elemento);
             });
         }
 
-        // Event listener para el botón principal
+        // Inicialización de eventos
         document.querySelector('#add-random-btn').addEventListener('click', añadirTarjetaAleatoria);
 
-        // Añadir un personaje inicial al cargar la página para que no esté vacía
         window.addEventListener('DOMContentLoaded', () => {
             añadirTarjetaAleatoria();
         });
